@@ -35,7 +35,7 @@ public class Film implements Serializable {
 
     public Film() {
     }
-
+Je suis la !!!!
     public Film(Long id, String titre, String synopsis, Long anneeProd, Genre genre) {
         this.id = id;
         this.titre = titre;
