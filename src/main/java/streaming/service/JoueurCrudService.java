@@ -5,6 +5,7 @@
  */
 package streaming.service;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import streaming.entity.Joueur;
 
@@ -16,5 +17,6 @@ public interface JoueurCrudService extends CrudRepository<Joueur, Long>
 {
     
    public Joueur findOneByPseudo(String pseudo);
+   public Joueur findOneByNumAvatar(int numAvatar);
     
 }

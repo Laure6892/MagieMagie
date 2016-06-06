@@ -43,11 +43,20 @@ public class JoueurController {
     @RequestMapping(method = RequestMethod.POST, value = "/connexion")
     public void connexionPost(@ModelAttribute("newJoueur") Joueur joueur ) {
         
-        //Test si un avatar est déjà selectionner, ne 
+        //Test si un avatar est déjà selectionner, il n'est plus disponible
+        // récupérer l'information de l'avatar entré dans le formulaire
+        int numAvatarSelectionne = joueur.getNumAvatar();
+        
+        // chercher si il y a un joueur avec cet avatar
+        Joueur j = joueurCService.findOneByNumAvatar(numAvatarSelectionne);
+        // si j n'est pas null alors l'avatar n'est pas dispo
+        if(j != null)
+        {
+            throw new RuntimeException("cet avatar est déjà attribué");
+        }
         
         // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
        joueurCService.save(joueur);
-
     }
 //
 //    public void demarerJeux() {
