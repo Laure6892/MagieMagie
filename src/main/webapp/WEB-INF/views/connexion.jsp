@@ -26,7 +26,7 @@
             <form:input path="pseudo"/>
             <br>
             image avatar 1 <form:radiobutton path="numAvatar" value="1"/>
-            
+            <img src="images/sorcier1.png" style="width:150px;height:150px;">
             <br>
             image avatar 2 <form:radiobutton path="numAvatar" value="2"/>
             <br>
