@@ -7,10 +7,12 @@ package streaming.controller;
 
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import static streaming.entity.Carte_.joueur;
+
 import streaming.entity.Joueur;
 import streaming.service.CarteCrudService;
 import streaming.service.JoueurCrudService;
@@ -19,6 +21,7 @@ import streaming.service.JoueurCrudService;
  *
  * @author ajc
  */
+@Controller
 public class JoueurController {
 
     @Autowired
@@ -27,7 +30,7 @@ public class JoueurController {
     private CarteCrudService carteCServ;
 
     // methode créer un joueur
-    @RequestMapping(method = RequestMethod.GET, value = "/connexion")
+    @RequestMapping(value = "/connexion",method = RequestMethod.GET)
     public String connexionGet( Model model) {
         // créer un nouveau joueur en BD pour avoir accés à ces attributs dans la JSP
         Joueur joueur = new Joueur();
@@ -37,13 +40,15 @@ public class JoueurController {
         return "connexion";
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/connexion")
-//    public void connexionPost(Joueur joueur) {
-//        
-//        // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
-//       joueurCService.save(joueur);
-//
-//    }
+    @RequestMapping(method = RequestMethod.POST, value = "/connexion")
+    public void connexionPost(@ModelAttribute("newJoueur") Joueur joueur ) {
+        
+        //Test si un avatar est déjà selectionner, ne 
+        
+        // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
+       joueurCService.save(joueur);
+
+    }
 //
 //    public void demarerJeux() {
 //        

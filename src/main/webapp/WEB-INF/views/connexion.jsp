@@ -17,12 +17,16 @@
 
         Entrez-un pseudo et choisissez votre avatar
         <br> <br>
-        <form:form modelAttribute="newJoueur" method="post">
+
+        <c:set var="maroute"><c:url value="/connexion"/></c:set>
+
+        <form:form modelAttribute="newJoueur" method="post" action="${maroute}">
 
             <label>Pseudo</label>
             <form:input path="pseudo"/>
-
+            <br>
             image avatar 1 <form:radiobutton path="numAvatar" value="1"/>
+            
             <br>
             image avatar 2 <form:radiobutton path="numAvatar" value="2"/>
             <br>
@@ -38,7 +42,7 @@
             <br>
             image avatar 8 <form:radiobutton path="numAvatar" value="8"/>
             <br>
-            
+
             <input type="submit"/>
 
         </form:form>
