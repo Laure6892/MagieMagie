@@ -29,6 +29,8 @@ public class Joueur implements Serializable {
     private String pseudo;
     private int ordre;
     private boolean main;
+    // numAvatar permet d'associer un avatar à un joueur
+    private int numAvatar;
     
     // relation
     @OneToMany(mappedBy = "joueur")
@@ -50,6 +52,22 @@ public class Joueur implements Serializable {
 
     public void setOrdre(int ordre) {
         this.ordre = ordre;
+    }
+
+    public int getNumAvatar() {
+        return numAvatar;
+    }
+
+    public void setNumAvatar(int numAvatar) {
+        this.numAvatar = numAvatar;
+    }
+
+    public List<Carte> getCartes() {
+        return cartes;
+    }
+
+    public void setCartes(List<Carte> cartes) {
+        this.cartes = cartes;
     }
 
     public boolean isMain() {

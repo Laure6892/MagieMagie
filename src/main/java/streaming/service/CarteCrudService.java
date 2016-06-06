@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dto;
+package streaming.service;
+
+import org.springframework.data.repository.CrudRepository;
+import streaming.entity.Carte;
 
 /**
  *
  * @author ajc
  */
-public class JoueurDTO {
-
+public interface CarteCrudService extends CrudRepository<Carte, Long>{
     
 }

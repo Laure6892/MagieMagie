@@ -1,0 +1,63 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package streaming.controller;
+
+import java.util.Random;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import static streaming.entity.Carte_.joueur;
+import streaming.entity.Joueur;
+import streaming.service.CarteCrudService;
+import streaming.service.JoueurCrudService;
+
+/**
+ *
+ * @author ajc
+ */
+public class JoueurController {
+
+    @Autowired
+    private JoueurCrudService joueurCService;
+    @Autowired
+    private CarteCrudService carteCServ;
+
+    // methode créer un joueur
+    @RequestMapping(method = RequestMethod.GET, value = "/connexion")
+    public String connexionGet( Model model) {
+        // créer un nouveau joueur en BD pour avoir accés à ces attributs dans la JSP
+        Joueur joueur = new Joueur();
+        // envoyer à la jsp pour avoir un formulaire
+        model.addAttribute("newJoueur", joueur);
+        // vers la jsp
+        return "connexion";
+               
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/connexion")
+    public void connexionPost(Joueur joueur) {
+        
+        // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
+       joueurCService.save(joueur);
+
+    }
+
+    public void demarerJeux() {
+        
+
+        // crée 7 cartes aléatoires qui lui sont associées (boucle pour 7 tours/ 7 cartes)
+        for (int i = 0; i < 7; i++) {
+            // lancer un random pour générer un numéro comprit entre 1 et 5 qui correspond à une carte
+            Random r = new Random();
+            int numeroCarte = 1 + r.nextInt(5 - 1 + 1);
+
+        }
+
+    }
+
+}
