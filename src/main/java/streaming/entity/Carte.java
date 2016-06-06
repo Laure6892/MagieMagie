@@ -7,6 +7,8 @@ package streaming.entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,14 +42,14 @@ public class Carte implements Serializable {
         CORNE_LICORNE,
         AILE_CHAUVE_SOURIS,
     }
-
+    @Enumerated(EnumType.STRING)
     private typeCarte type;
-    
+
     // relations
     @ManyToOne
     @JoinColumn(name = "joueur_id")
     private Joueur joueur;
-    
+
     // getter/setter
     @Override
     public int hashCode() {
@@ -77,7 +79,6 @@ public class Carte implements Serializable {
         this.type = type;
     }
 
-    
     @Override
     public String toString() {
         return "streaming.entity.Carte[ id=" + id + " ]";
