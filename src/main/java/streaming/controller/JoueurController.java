@@ -35,29 +35,27 @@ public class JoueurController {
         model.addAttribute("newJoueur", joueur);
         // vers la jsp
         return "connexion";
-               
-
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/connexion")
-    public void connexionPost(Joueur joueur) {
-        
-        // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
-       joueurCService.save(joueur);
+//    @RequestMapping(method = RequestMethod.GET, value = "/connexion")
+//    public void connexionPost(Joueur joueur) {
+//        
+//        // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
+//       joueurCService.save(joueur);
+//
+//    }
+//
+//    public void demarerJeux() {
+//        
+//
+//        // crée 7 cartes aléatoires qui lui sont associées (boucle pour 7 tours/ 7 cartes)
+//        for (int i = 0; i < 7; i++) {
+//            // lancer un random pour générer un numéro comprit entre 1 et 5 qui correspond à une carte
+//            Random r = new Random();
+//            int numeroCarte = 1 + r.nextInt(5 - 1 + 1);
+//
+//        }
 
-    }
-
-    public void demarerJeux() {
-        
-
-        // crée 7 cartes aléatoires qui lui sont associées (boucle pour 7 tours/ 7 cartes)
-        for (int i = 0; i < 7; i++) {
-            // lancer un random pour générer un numéro comprit entre 1 et 5 qui correspond à une carte
-            Random r = new Random();
-            int numeroCarte = 1 + r.nextInt(5 - 1 + 1);
-
-        }
-
-    }
+//    }
 
 }

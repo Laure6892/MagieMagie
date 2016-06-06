@@ -22,6 +22,22 @@
             <label>Pseudo</label>
             <form:input path="pseudo"/>
 
+            image avatar 1 <form:radiobutton path="numAvatar" value="1"/>
+            <br>
+            image avatar 2 <form:radiobutton path="numAvatar" value="2"/>
+            <br>
+            image avatar 3 <form:radiobutton path="numAvatar" value="3"/>
+            <br>
+            image avatar 4 <form:radiobutton path="numAvatar" value="4"/>
+            <br>
+            image avatar 5 <form:radiobutton path="numAvatar" value="5"/>
+            <br>
+            image avatar 6 <form:radiobutton path="numAvatar" value="6"/>
+            <br>
+            image avatar 7 <form:radiobutton path="numAvatar" value="7"/>
+            <br>
+            image avatar 8 <form:radiobutton path="numAvatar" value="8"/>
+            <br>
             
             <input type="submit"/>
 
