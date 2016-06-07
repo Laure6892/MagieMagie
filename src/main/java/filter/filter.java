@@ -5,7 +5,6 @@
  */
 package filter;
 
-import streaming.filter.*;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,18 +16,16 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import streaming.service.CycleService;
 
 /**
  *
  * @author ajc
  */
+/*
 @WebFilter(filterName = "CommonFilter", urlPatterns = {"/*"})
 public class filter implements Filter {
 
-    // but, ce filtre s'applique avant chaque servlets
-    @Autowired
-    private CycleService cycleService;
+ 
 
     // implement all abstract
     @Override
@@ -42,17 +39,9 @@ public class filter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) sr;
         // si aucun joueur n'est connecté
-        if (req.getSession().getAttribute("joueurCo") == null) {
-
-            // forward directement vers les servlets
-        } else {
-            // si un joueur est connecté
-
-            req.setAttribute("numCycle", cycleService.getCycleActuel());
-
-        }
+    
         // la commande suivante permet de réorienter vers la servlet cible
-        fc.doFilter(req, sr1);
+     //   fc.doFilter(req, sr1);
     }
 
     @Override
@@ -60,3 +49,4 @@ public class filter implements Filter {
     }
 
 }
+*/

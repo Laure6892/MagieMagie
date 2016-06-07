@@ -11,15 +11,26 @@
         <c:import url="_HEAD.jsp"/>
     </head>
     <body>
+ 
         <div class="cartes">
-            <c:import url="_CARTE_DISPO.jsp"/>
-        </div>
-        <div class="adversaires">
-            <c:import url="_ADVERSAIRE.jsp"/>
+            <c:import url="_TABLEAUDEBORD.jsp"/>
+       
         </div>
         <div class="contenu">
+            
+    <c:forEach items="${listeJoueurs}" var="unJoueur">
+    
+        <div>
+             ${unJoueur.pseudo}   
+             ${unJoueur.nbreCarte}         
+            ${unJoueur.numAvatar}
+         
         </div>
+    </c:forEach>
+        </div>
+               
         <div class="menuJeux">
-            <c:import url="_MENUJEUX.jsp"/>    </div>
+            <c:import url="_MENUJEUX.jsp"/>    
+        </div>
     </body>
 </html>

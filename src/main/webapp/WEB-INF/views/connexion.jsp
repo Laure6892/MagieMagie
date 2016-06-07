@@ -24,31 +24,49 @@
 
             <label>Pseudo</label>
             <form:input path="pseudo"/>
-            <br>
-            image avatar 1 <form:radiobutton path="numAvatar" value="1"/>
-            <img src="images/sorcier1.png" style="width:150px;height:150px;">
-            <br>
-            image avatar 2 <form:radiobutton path="numAvatar" value="2"/>
-            <br>
-            image avatar 3 <form:radiobutton path="numAvatar" value="3"/>
-            <br>
-            image avatar 4 <form:radiobutton path="numAvatar" value="4"/>
-            <br>
-            image avatar 5 <form:radiobutton path="numAvatar" value="5"/>
-            <br>
-            image avatar 6 <form:radiobutton path="numAvatar" value="6"/>
-            <br>
-            image avatar 7 <form:radiobutton path="numAvatar" value="7"/>
-            <br>
-            image avatar 8 <form:radiobutton path="numAvatar" value="8"/>
-            <br>
-
+            
             <input type="submit"/>
+<center> 
+            <TABLE BORDER >
+                <TR>
+                    <TD>  <img src="images/sorcier1.jpg"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier2.png"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier3.png"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier4.png"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier5.png"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier6.png"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier7.png"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier8.png"  width="120" height="200"></TD> 
+                </TR>
+
+                <TR>
+                  <TD >    <form:radiobutton path="numAvatar" value="1"/></TD> 
+                    <TD>  <form:radiobutton path="numAvatar" value="2"/></TD> 
+                    <TD>   <form:radiobutton path="numAvatar" value="3"/></TD> 
+                    <TD>   <form:radiobutton path="numAvatar" value="4"/></TD> 
+                    <TD>    <form:radiobutton path="numAvatar" value="5"/></TD> 
+                    <TD>    <form:radiobutton path="numAvatar" value="6"/></TD> 
+                    <TD>   <form:radiobutton path="numAvatar" value="7"/></TD>
+                    <TD>   <form:radiobutton path="numAvatar" value="8"/></TD> 
+
+
+                </TR>
+            </TABLE>
+
+</center> 
+
+
+
+
+
+
+
+
 
         </form:form>
-            
-            <br> <br>
-            <a href="<c:url value="/demarrer"/>">Lancer le jeux</a>
-                   
+
+        <br> <br>
+        <a href="<c:url value="/demarrer"/>">Lancer le jeux</a>
+
     </body>
 </html>

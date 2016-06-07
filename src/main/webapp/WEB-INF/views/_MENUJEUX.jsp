@@ -14,7 +14,9 @@
     <body>
         <h1>Time to play!</h1>
         
-        <h2>Que voulez vous faire?>
-         
+        <h2>Que voulez vous faire Jeune sorcier?</h2>
+        
+          <a href="<c:url value="##"/>Passer mon tour</a><br>
+         <a href="<c:url value="##"/>Lancer un sort</a><br>
     </body>
 </html>

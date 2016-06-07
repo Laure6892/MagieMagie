@@ -5,7 +5,7 @@
  */
 package filter;
 
-import streaming.filter.*;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -20,23 +20,16 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import streaming.entity.Joueur;
-import streaming.service.RessourceCrudService;
-import streaming.service.RessourceService;
 
 /**
  *
  * @author ajc
  */
+/*
 @WebFilter(filterName = "TableauBordFiltre", urlPatterns = {"/*"})
 public class TableauBordFiltre implements Filter {
 
-    // le filtre s'affiche avant chaque servlets
-    @Autowired
-    private RessourceCrudService ressourceCrudService;
-    @Autowired
-    private RessourceService ressourceServ;
-
+    
     @Override
     public void init(FilterConfig fc) throws ServletException {
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
@@ -47,26 +40,7 @@ public class TableauBordFiltre implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) sr;
         // si aucun joueur n'est connecté
-        if (req.getSession().getAttribute("joueurCo") == null) {
-
-            // forward directement vers les servlets
-    
-
-        } // si un joueur est connecté
-        else {
-
-            Joueur j = (Joueur) req.getSession().getAttribute("joueurCo");
-
-            req.setAttribute("nbBles", ressourceServ.affichageBles(j.getId()));
-            req.setAttribute("nbCarotte", ressourceServ.affichageCarotte(j.getId()));
-            req.setAttribute("nbFromage", ressourceServ.affichageFromage(j.getId()));
-            req.setAttribute("nbChevre", ressourceServ.affichageChevre(j.getId()));
-            req.setAttribute("nbFermier", ressourceServ.affichageFermier(j.getId()));
-            
-             // produire régulièrement du fromage
-//            ressourceServ.productionFromage(j.getId());
-
-        }
+   
                 // la commande suivante permet de réorienter vers la servlet cible
             fc.doFilter(req, sr1);
     }
@@ -75,4 +49,4 @@ public class TableauBordFiltre implements Filter {
     public void destroy() {
     }
 
-}
+}*/

@@ -31,13 +31,21 @@ public class Joueur implements Serializable {
     private boolean main;
     // numAvatar permet d'associer un avatar à un joueur
     private int numAvatar;
+    private int nbreCarte;
     
     // relation
     @OneToMany(mappedBy = "joueur")
     private List<Carte> cartes = new ArrayList<Carte>();
-
     
+    public int getNbreCarte() {
+        return nbreCarte;
+    }
+
     // getter/setter
+    public void setNbreCarte(int nbreCarte) {    
+        this.nbreCarte = nbreCarte;
+    }
+
     public String getPseudo() {
         return pseudo;
     }

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import streaming.entity.Carte;
 import streaming.entity.CarteService;
 
 import streaming.entity.Joueur;
@@ -39,7 +40,7 @@ public class JoueurController {
         // créer un nouveau joueur en BD pour avoir accés à ces attributs dans la JSP
         Joueur joueur = new Joueur();
         // envoyer à la jsp pour avoir un formulaire
-        model.addAttribute("newJoueur", joueur);
+          model.addAttribute("newJoueur", joueur);
         // vers la jsp
         return "connexion";
     }
@@ -63,11 +64,14 @@ public class JoueurController {
     }
 
     @RequestMapping(value = "/demarrer", method = RequestMethod.GET)
-    public String demarerJeux() {
+    public String demarerJeux(Model model) {
 
         // chercher tous les joueurs qui sont enregistrés en BD
         List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
-
+        // chercher toutes les cartes de la base de données
+       
+     
+       
         // attribuer un ordre de passage pour cahcun des joueurs de la liste
         for (Joueur joueur : joueurs) {
             for (int i = 1; i <= joueurs.size(); i++) {
@@ -88,9 +92,14 @@ public class JoueurController {
                 long idJour = joueur.getId();
                 carteServ.creationCarteAleatoire(idJour, numeroCarte);
             }
+            
+         joueur.setNbreCarte(7);
         }
         // vers la page jsp du lancement du jeu
-        return "acceuil";
-
+      //    List<Carte> cartes = (List<Carte>)carteCServ.findAll();
+         List<Joueur> joueurs2= (List<Joueur>) joueurCService.findAll();
+          model.addAttribute("listeJoueurs", joueurs2);
+    //  return "acceuil";
+           return "_Start";
     }
 }

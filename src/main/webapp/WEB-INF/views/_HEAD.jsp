@@ -1,17 +1,10 @@
 <%-- 
     Document   : _HEAD
-    Created on : 6 juin 2016, 12:26:03
+    Created on : 24 mai 2016, 09:48:44
     Author     : ajc
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<link href="CSS/style.css" rel="stylesheet" type="text/css"/>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
