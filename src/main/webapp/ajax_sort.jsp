@@ -15,9 +15,10 @@
                 // utiliser la commande suivante pour oriente le system vers la contoller
                 if (type == 1)
                 {
+//                    $.get('/sort');
                     alert('Invisibilite');
                 }
-                //   $.get('/sort/');
+
                 if (type == 2)
                 {
                     alert('Filtre amour');
@@ -27,7 +28,7 @@
 
     </head>
     <body>
-        <input type="button" value="Invisibilité" onclick="lancerSortInvisibiliteOrFiltreAmour(1)">
+        <input type="button" id="sortilege" value="Invisibilité"  onclick="lancerSortInvisibiliteOrFiltreAmour(1)">
         <br>
         <input type="button"   value="Filtre d'amour" onclick="lancerSortInvisibiliteOrFiltreAmour(2)">
         <br>
