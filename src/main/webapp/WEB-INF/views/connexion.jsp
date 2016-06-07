@@ -46,9 +46,5 @@
             <input type="submit"/>
 
         </form:form>
-            
-            <br> <br>
-            <a href="<c:url value="/demarrer"/>">Lancer le jeux</a>
-                   
     </body>
 </html>

@@ -13,7 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import streaming.entity.CarteService;
+import streaming.service.CarteService;
 
 import streaming.entity.Joueur;
 import streaming.service.CarteCrudService;
@@ -63,10 +63,19 @@ public class JoueurController {
     }
 
     @RequestMapping(value = "/demarrer", method = RequestMethod.GET)
-    public String demarerJeux() {
+    public String demarerJeux(Model model) {
 
         // chercher tous les joueurs qui sont enregistrés en BD
         List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
+
+        //########################################################################################
+        // gestion de l'affichage de la fonction démarrer jeux non fonctionnel
+        //########################################################################################
+
+        // si il n'y a pas 2 joueurs, le bouton "démarer" ne doit pas s'afficher
+//        model.addAttribute("joueursCo", joueurs.size());
+//        int joueursCo = joueurs.size();
+        //########################################################################################
 
         // attribuer un ordre de passage pour cahcun des joueurs de la liste
         for (Joueur joueur : joueurs) {
@@ -78,12 +87,13 @@ public class JoueurController {
 
             // crée 7 cartes aléatoirement qui sont associées à un joueur(boucle pour 7 tours/ 7 cartes)
             for (int i = 1; i < 8; i++) {
-                
+
                 // Les cartes sont identifiée par un numéro (dans le fichier CarteService)
                 // lancer un random pour générer un numéro comprit entre 1 et 5 
                 Random r = new Random();
+                // max - min + 1
                 int numeroCarte = 1 + r.nextInt(5 - 1 + 1);
-                
+
                 // créer la carte correspondante en récupérant l'id du joueur en question
                 long idJour = joueur.getId();
                 carteServ.creationCarteAleatoire(idJour, numeroCarte);
@@ -91,6 +101,5 @@ public class JoueurController {
         }
         // vers la page jsp du lancement du jeu
         return "acceuil";
-
     }
 }

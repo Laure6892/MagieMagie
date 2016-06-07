@@ -5,6 +5,7 @@
  */
 package streaming.service;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import streaming.entity.Carte;
 
@@ -12,6 +13,12 @@ import streaming.entity.Carte;
  *
  * @author ajc
  */
-public interface CarteCrudService extends CrudRepository<Carte, Long>{
-    
+public interface CarteCrudService extends CrudRepository<Carte, Long> {
+
+    List<Carte> findAllByJoueurIdAndType(long idJoueur, Carte.typeCarte type);
+
+    List<Carte> findAllByJoueurId(long idJoueur);
+
+    Carte findOneByJoueurIdAndType(long idJoueur, Carte.typeCarte type);
+
 }
