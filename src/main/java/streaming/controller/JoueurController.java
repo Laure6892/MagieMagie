@@ -40,13 +40,13 @@ public class JoueurController {
         // créer un nouveau joueur en BD pour avoir accés à ces attributs dans la JSP
         Joueur joueur = new Joueur();
         // envoyer à la jsp pour avoir un formulaire
-          model.addAttribute("newJoueur", joueur);
+        model.addAttribute("newJoueur", joueur);
         // vers la jsp
         return "connexion";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/connexion")
-    public void connexionPost(@ModelAttribute("newJoueur") Joueur joueur,HttpSession session) {
+    public void connexionPost(@ModelAttribute("newJoueur") Joueur joueur, HttpSession session) {
 
         //Test si un avatar est déjà selectionner, il n'est plus disponible
         // récupérer l'information de l'avatar entré dans le formulaire
@@ -62,10 +62,11 @@ public class JoueurController {
         // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
         joueurCService.save(joueur);
         session.setAttribute("joueurNow", joueur);
+        
     }
 
     @RequestMapping(value = "/demarrer", method = RequestMethod.GET)
-    public String demarerJeux(Model model,HttpSession session) {
+    public String demarerJeux(Model model, HttpSession session) {
 
         // chercher tous les joueurs qui sont enregistrés en BD
         List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
@@ -73,12 +74,10 @@ public class JoueurController {
         //########################################################################################
         // gestion de l'affichage de la fonction démarrer jeux non fonctionnel
         //########################################################################################
-
         // si il n'y a pas 2 joueurs, le bouton "démarer" ne doit pas s'afficher
 //        model.addAttribute("joueursCo", joueurs.size());
 //        int joueursCo = joueurs.size();
         //########################################################################################
-
         // attribuer un ordre de passage pour cahcun des joueurs de la liste
         for (Joueur joueur : joueurs) {
             for (int i = 1; i <= joueurs.size(); i++) {
@@ -100,19 +99,19 @@ public class JoueurController {
                 long idJour = joueur.getId();
                 carteServ.creationCarteAleatoire(idJour, numeroCarte);
             }
-            
-         joueur.setNbreCarte(7);
+
+            joueur.setNbreCarte(7);
         }
-        // vers la page jsp du lancement du jeu
-         List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
-       Joueur joueurActuel= (Joueur)session.getAttribute("joueurNow");
-       Long idJ=joueurActuel.getId();
-     //  System.out.println("ICI LE JOUEUR A VIRER ID="+ idJ);  
-       // Joueur joueurDelete=joueurCService.findOne(joueurActuel.getId());
-        Joueur jDelete=joueurCService.findOne(idJ);
+
+        // afficher les avatars des adversaires dans le menu du jeux mais sans le joueur actuel
+        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
+        Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
+        Long idJ = joueurActuel.getId();
+        Joueur jDelete = joueurCService.findOne(idJ);
         joueurs2.remove(jDelete);
-     
-         model.addAttribute("listeJoueurs",joueurs2);
+
+        model.addAttribute("listeJoueurs", joueurs2);
+        // vers la page jsp du lancement du jeu
         return "_Start";
     }
 }

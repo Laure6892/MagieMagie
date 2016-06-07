@@ -27,17 +27,17 @@
                 <c:if test="${unJoueur.numAvatar==2}">                 
                     <img src="images/sorcier2.png"  width="120" height="200">
                 </c:if>
-                    <c:if test="${unJoueur.numAvatar==3}">
-               <img src="images/sorcier3.png"  width="120" height="200">
+                <c:if test="${unJoueur.numAvatar==3}">
+                    <img src="images/sorcier3.png"  width="120" height="200">
                 </c:if>
-               <c:if test="${unJoueur.numAvatar==4}">
+                <c:if test="${unJoueur.numAvatar==4}">
 
                     <img src="images/sorcier4.png"  width="120" height="200">
                 </c:if>
-                    <c:if test="${unJoueur.numAvatar==5}">            
+                <c:if test="${unJoueur.numAvatar==5}">            
                     <img src="images/sorcier5.png"  width="120" height="200">
                 </c:if>
-                    <c:if test="${unJoueur.numAvatar==6}">      
+                <c:if test="${unJoueur.numAvatar==6}">      
                     <img src="images/sorcier6.png"  width="120" height="200">
                 </c:if>
                 <c:if test="${unJoueur.numAvatar==7}">

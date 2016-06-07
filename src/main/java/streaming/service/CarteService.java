@@ -23,7 +23,7 @@ public class CarteService {
 
     @Autowired
     private JoueurCrudService joueurCService;
-    
+
     @Autowired
     private CarteCrudService carteCServ;
 
@@ -110,25 +110,14 @@ public class CarteService {
         for (int i = 0; i < nbCVole; i++) {
             //creer un chiffre aléatoire pour déterminer la position de la carte à supprimer au hasard chez l'adversaire
             Random r = new Random();
-            // max - min + 1
-            int c = 1 + r.nextInt(cartesAdversaire.size() - 1 + 1);
-
+            // détermination de la position de la carte cible à récupérer de façon random
+            int c = 1 + r.nextInt(cartesAdversaire.size());
             // récupérer la carte se situant à la position c de la liste
             Carte carteCible = cartesAdversaire.get(c);
-            // récupérer le type de la carte sélectionnée
-            Carte.typeCarte typeCarteCible = carteCible.getType();
-            // créer une carte identique chez l'attaquant
-
-            Carte carte = new Carte();
-            carte.setType(typeCarteCible);
-
-            // sauvegarder la carte en BD du joueur correspondant (dans la table carte ET joueur)
-            carte.setJoueur(joueurCService.findOne(jNow.getId()));
-            carte.getJoueur().getCartes().add(carte);
-
-            carteCServ.save(carte);
-            // supprime la carte sélectionnée chez l'ennemie
-            carteCServ.delete(carteCible);
+            // modifier l'ID du joueur a qui appartient la carte = idJoueurNow
+            carteCible.setJoueur(jNow);
+            // sauvegarder les modifications en BD
+            carteCServ.save(carteCible);
         }
     }
 
