@@ -6,3 +6,6 @@ function chargerPlateau()
 {setTimeout(chargerPlateau,2000);}
 
 chargerPlateau();
+
+
+   

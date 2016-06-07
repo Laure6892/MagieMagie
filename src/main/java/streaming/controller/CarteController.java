@@ -76,7 +76,7 @@ public class CarteController {
 
     // methode en mode test : les id des joueurs sont entrées manuellement !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     @RequestMapping(method = RequestMethod.POST, value = "/sort")
-    public String sortilegeGet(@ModelAttribute("monDto") ListeSortDTO dto, HttpSession session) {
+    public String sortilegePost(@ModelAttribute("monDto") ListeSortDTO dto, HttpSession session) {
 
         int nbCVole = 0;
         int nbCDonne = 0;
