@@ -34,6 +34,11 @@ public class CarteController {
     @RequestMapping(method = RequestMethod.GET, value = "/sort")
     public String sortilegePost(Model model,int numAttack, Joueur jCible, Joueur jNow) {
         
+        
+        // liste des joueurs pour choisir la victime (en excluant le jour à qui c'est le tour) a mettre dans un model
+//        List<Joueur> listeJoueurs;
+//        model.addAttribute("JoueursCo", listeJoueurs);
+        
         // vers jsp sort?
          return "";
     }
