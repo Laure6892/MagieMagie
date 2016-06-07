@@ -7,6 +7,7 @@ package streaming.controller;
 
 import java.util.List;
 import java.util.Random;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +46,7 @@ public class JoueurController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/connexion")
-    public void connexionPost(@ModelAttribute("newJoueur") Joueur joueur) {
+    public void connexionPost(@ModelAttribute("newJoueur") Joueur joueur,HttpSession session) {
 
         //Test si un avatar est déjà selectionner, il n'est plus disponible
         // récupérer l'information de l'avatar entré dans le formulaire
@@ -60,10 +61,11 @@ public class JoueurController {
 
         // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
         joueurCService.save(joueur);
+        session.setAttribute("joueurNow", joueur);
     }
 
     @RequestMapping(value = "/demarrer", method = RequestMethod.GET)
-    public String demarerJeux(Model model) {
+    public String demarerJeux(Model model,HttpSession session) {
 
         // chercher tous les joueurs qui sont enregistrés en BD
         List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
@@ -103,7 +105,14 @@ public class JoueurController {
         }
         // vers la page jsp du lancement du jeu
          List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
-       model.addAttribute("listeJoueurs",joueurs2);
+       Joueur joueurActuel= (Joueur)session.getAttribute("joueurNow");
+       Long idJ=joueurActuel.getId();
+     //  System.out.println("ICI LE JOUEUR A VIRER ID="+ idJ);  
+       // Joueur joueurDelete=joueurCService.findOne(joueurActuel.getId());
+        Joueur jDelete=joueurCService.findOne(idJ);
+        joueurs2.remove(jDelete);
+     
+         model.addAttribute("listeJoueurs",joueurs2);
         return "_Start";
     }
 }
