@@ -55,18 +55,8 @@
 
 </center> 
 
-
-
-
-
-
-
-
+ <a href="<c:url value="/demarrer"/>">Lancer la Partie</a>
 
         </form:form>
-
-        <br> <br>
-        <a href="<c:url value="/demarrer"/>">Lancer le jeux</a>
-
     </body>
 </html>
