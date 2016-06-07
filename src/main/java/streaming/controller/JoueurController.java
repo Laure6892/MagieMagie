@@ -63,10 +63,11 @@ public class JoueurController {
         // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
         joueurCService.save(joueur);
         session.setAttribute("joueurNow", joueur);
-        return "redirect:/demarrer";
+       // return "redirect:/start";
+       return "start";
     }
 
-    @RequestMapping(value = "/demarrer", method = RequestMethod.GET)
+    @RequestMapping(value = "/page_jeu", method = RequestMethod.GET)
     public String demarerJeux(Model model, HttpSession session) {
 
         // chercher tous les joueurs qui sont enregistrés en BD
@@ -99,9 +100,10 @@ public class JoueurController {
                 // créer la carte correspondante en récupérant l'id du joueur en question
                 long idJour = joueur.getId();
                 carteServ.creationCarteAleatoire(idJour, numeroCarte);
+                           joueur.setNbreCarte(joueur.getNbreCarte()+1);
             }
 
-            joueur.setNbreCarte(7);
+ 
             joueurCService.save(joueur);
 
         }
@@ -115,47 +117,39 @@ public class JoueurController {
         joueurs2.remove(jDelete);
 
         model.addAttribute("listeJoueurs", joueurs2);
-        model.addAttribute("joueurActuel", jDelete);
-        return "start";
-    }
-
-    @RequestMapping(value = "ajax_plateau", method = RequestMethod.GET)
-    public String ajaxPlateau(Model model, HttpSession session) {
-
+     return "page_jeu";
+}
+    
+    @RequestMapping(value = "/ajax_plateau", method = RequestMethod.GET)
+    public String ajax(Model model,HttpSession session) {
+        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         Long idJ = joueurActuel.getId();
-
+ 
         Joueur jDelete = joueurCService.findOne(idJ);
-        model.addAttribute("joueurActuel", jDelete);
-        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
+         List<Carte> cartes=( List<Carte> )carteCServ.findAllByJoueurId(idJ);
         joueurs2.remove(jDelete);
+  
+         model.addAttribute("listeCarte", cartes);
         model.addAttribute("listeJoueurs", joueurs2);
-        List<Carte> cartes= (List<Carte>)carteCServ.findAllByJoueurId(idJ);
-             model.addAttribute("listeCarte", cartes);
+        model.addAttribute("joueurActuel", joueurActuel);
+        
+        // vers la jsp
         return "ajax_plateau";
     }
-
-    @RequestMapping(value = "ajax_plateau2", method = RequestMethod.GET)
-    public String ajaxPlateau2(Model model, HttpSession session) {
-
+    @RequestMapping(value = "/ajax_plateau2", method = RequestMethod.GET)
+    public String ajax2(Model model,HttpSession session) {
+        
+          List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         Long idJ = joueurActuel.getId();
 
         Joueur jDelete = joueurCService.findOne(idJ);
-        model.addAttribute("joueurActuel", jDelete);
-        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
         joueurs2.remove(jDelete);
+    
         model.addAttribute("listeJoueurs", joueurs2);
+        model.addAttribute("joueurActuel", joueurActuel);
+      
         return "ajax_plateau2";
-    }
-
-    @RequestMapping(value = "/page_jeu", method = RequestMethod.GET)
-    public String startGet(Model model) {
-        // créer un nouveau joueur en BD pour avoir accés à ces attributs dans la JSP
-        // Joueur joueur = new Joueur();
-        // envoyer à la jsp pour avoir un formulaire
-
-        // vers la jsp
-        return "page_jeu";
     }
 }
