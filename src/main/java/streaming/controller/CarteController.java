@@ -82,8 +82,8 @@ public class CarteController {
         int nbCDonne = 0;
         
           // récupérer l'attaquant (http session)
-//        Joueur jNow = (Joueur) session.getAttribute("joueurNow");
-           Joueur jNow = joueurCServ.findOne(1L);
+            Joueur jNow = (Joueur) session.getAttribute("joueurNow");
+           //Joueur jNow = joueurCServ.findOne(1L);
         // récupérer la cible sélectionnée dans le formulaire (non fonctionnel) a rajouter en paramètre de la méthode
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Joueur jCible = joueurCServ.findOne(2L);

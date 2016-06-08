@@ -108,6 +108,10 @@ public class CarteService {
         List<Carte> cartesAdversaire = carteCServ.findAllByJoueurId(jCible.getId());
 
         for (int i = 0; i < nbCVole; i++) {
+            //decremente le nbre de carte du joueur cible
+            jCible.setNbreCarte(jCible.getNbreCarte()-1);
+          
+            
             //creer un chiffre aléatoire pour déterminer la position de la carte à supprimer au hasard chez l'adversaire
             Random r = new Random();
             // détermination de la position de la carte cible à récupérer de façon random
@@ -116,8 +120,13 @@ public class CarteService {
             Carte carteCible = cartesAdversaire.get(c);
             // modifier l'ID du joueur a qui appartient la carte = idJoueurNow
             carteCible.setJoueur(jNow);
-            // sauvegarder les modifications en BD
+              //increment le nbre de carte de notre joueur
+              jNow.setNbreCarte(jNow.getNbreCarte()+1);
+            // sauvegarder les modifications en BDD
             carteCServ.save(carteCible);
+            //On save le fait d'avoir modifier le nombre de carte du joueur cible
+            joueurCService.save(jCible);
+             joueurCService.save(jNow);
         }
     }
 
@@ -125,6 +134,7 @@ public class CarteService {
 
         // supprimer la carte a donner de la BD de l'attaquant
         Carte carteDonne = carteCServ.findOneByJoueurIdAndType(jNow.getId(), typeCarteEchange);
+         jNow.setNbreCarte(jNow.getNbreCarte()-1);
         // creer une carte identique en BD de l'adversaire
         Carte carte = new Carte();
         carte.setType(typeCarteEchange);
@@ -132,7 +142,9 @@ public class CarteService {
         // sauvegarder la carte en BD du joueur correspondant (dans la table carte ET joueur)
         carte.setJoueur(joueurCService.findOne(jCible.getId()));
         carte.getJoueur().getCartes().add(carte);
-
+         jCible.setNbreCarte(jCible.getNbreCarte()+1);
         carteCServ.save(carte);
+        joueurCService.save(jCible);
+        joueurCService.save(jNow);
     }
 }

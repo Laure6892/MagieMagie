@@ -55,7 +55,6 @@
 
 </center> 
 
- <a href="<c:url value="/demarrer"/>">Lancer la Partie</a>
 
         </form:form>
     </body>
