@@ -19,6 +19,7 @@ import streaming.entity.Carte;
 import streaming.service.CarteService;
 
 import streaming.entity.Joueur;
+import streaming.entity.JoueurService;
 import streaming.service.CarteCrudService;
 import streaming.service.JoueurCrudService;
 
@@ -37,6 +38,8 @@ public class JoueurController {
     private CarteCrudService carteCServ;
     @Autowired
     private CarteService carteServ;
+    @Autowired
+    private JoueurService joueurServ;
 
     // methode créer un joueur
     @RequestMapping(value = "/connexion", method = RequestMethod.GET)
@@ -67,18 +70,11 @@ public class JoueurController {
         //  joueurCService.save(joueur);
         session.setAttribute("joueurNow", joueur);
 
-        // chercher tous les joueurs qui sont enregistrés en BD
-        //    List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
+        // sauvegarder le joueur pour générer son id en BD
         joueurCService.save(joueur);
-//            for (int i = 1; i <= joueurs.size(); i++) {
-//                joueur.setOrdre(i);
-//                // sauvegarder les modifications
-//                joueurCService.save(joueur);
-//            }
 
         // crée 7 cartes aléatoirement qui sont associées à un joueur(boucle pour 7 tours/ 7 cartes)
         for (int i = 1; i < 8; i++) {
-
             // Les cartes sont identifiée par un numéro (dans le fichier CarteService)
             // lancer un random pour générer un numéro comprit entre 1 et 5 
             Random r = new Random();
@@ -90,11 +86,24 @@ public class JoueurController {
             carteServ.creationCarteAleatoire(idJour, numeroCarte);
             joueur.setNbreCarte(joueur.getNbreCarte() + 1);
         }
+        // initialiser la valeur de l'ordre de passage des joueurs, le premier inscrit
+        // est le premier a jouer
+        // l'ordre correspond à la position du joueur en BD
+        // recuper la liste des joueurs inscrit pour avoir la taille de la liste
+        List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
 
+        // setter la valeur de la taille de la liste pour l'ordre
+        joueur.setOrdre(joueurs.size());
+
+        // si l'ordre du joueur = 1 alors on lui donne la main (démarage du jeux)
+        if (joueur.getOrdre() == 1) {
+            joueur.setMain(true);
+        }
+        // sauvegarder les modifications
         joueurCService.save(joueur);
-
-        //  return "redirect:/start";
-        return "start";
+//            
+        return "/start";
+        // return "start";
     }
 
     @RequestMapping(value = "/page_jeu", method = RequestMethod.GET)
@@ -146,8 +155,8 @@ public class JoueurController {
 
         return "ajax_plateau2";
     }
-    
-        @RequestMapping(value = "/divination", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/divination", method = RequestMethod.GET)
     public String divination(Model model, HttpSession session) {
 
         List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
@@ -168,22 +177,21 @@ public class JoueurController {
 
         //envoyer liste des joueurs pour choisir la victime (en excluant le jour à qui c'est le tour) a mettre dans un model) dans la jsp
         List<Joueur> listeEnnemis = (List<Joueur>) joueurCService.findAll();
-    
+
         // recuperer le joueur actuel et récuperer son id
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         Long idJActuel = joueurActuel.getId();
         // récupérer le joueur actuel en BD
         Joueur jDelete = joueurCServ.findOne(idJActuel);
-          model.addAttribute("monDto", new ListeSortDTO());
-          
-          //Affichera que les sorts ppossibles
-         
-        
-         model.addAttribute("amour",carteServ.AutorisationSortFiltreAmour(jDelete));
-         model.addAttribute("divination",carteServ.AutorisationSortDivination(jDelete));
-         model.addAttribute("hypnose",carteServ.AutorisationSortHypnose(jDelete));
-         model.addAttribute("invisibilite",carteServ.AutorisationSortInvisibilite(jDelete));
-         model.addAttribute("sommeil",carteServ.AutorisationSortSommeil(jDelete));
+        model.addAttribute("joueurActuel", joueurActuel.isMain());
+        model.addAttribute("monDto", new ListeSortDTO());
+
+        //Affichera que les sorts ppossibles
+        model.addAttribute("amour", carteServ.AutorisationSortFiltreAmour(jDelete));
+        model.addAttribute("divination", carteServ.AutorisationSortDivination(jDelete));
+        model.addAttribute("hypnose", carteServ.AutorisationSortHypnose(jDelete));
+        model.addAttribute("invisibilite", carteServ.AutorisationSortInvisibilite(jDelete));
+        model.addAttribute("sommeil", carteServ.AutorisationSortSommeil(jDelete));
         // retirer le joueur actuel de la liste des joueurs cibles potentiels
         listeEnnemis.remove(jDelete);
 
@@ -191,9 +199,6 @@ public class JoueurController {
         // chercher la liste des carte du joueur actuel
         List<Carte> cartesJoueurActuel = carteCServ.findAllByJoueurId(idJActuel);
 
-
-  
-  
         // mettre dans un model la liste des joueurs cibles potentiels à la JSP
         model.addAttribute("listeEnnemis", listeEnnemis);
         // envoyer la liste des cartes que le joueur actuel peut echanger
@@ -214,7 +219,7 @@ public class JoueurController {
         joueurs2.remove(jDelete);
 //  
 //         model.addAttribute("listeCarte", cartes);
-     
+
         model.addAttribute("listeJoueurs", joueurs2);
         model.addAttribute("joueurActuel", joueurActuel);
 
@@ -245,23 +250,24 @@ public class JoueurController {
             System.out.println("ICIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
             // supprimer les cartes consommées pour le sort après avoir vérifier que le joueur avait bien les cartes nécessaires
             // et que l'adversaire sélectionné possède encore des cartes
-             System.out.println("****************************"+jCible.getPseudo());
+            System.out.println("****************************" + jCible.getPseudo());
             carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow, jCible, Carte.typeCarte.BAVE_CRAPAUD, Carte.typeCarte.CORNE_LICORNE);
 
             // nombre de cartes à supprimer chez l'adversaire/creer chez l'attaquant
-              nbCVole = 1;
+            nbCVole = 1;
             // vole de carte
-              carteServ.volerCarte(jNow, jCible, nbCVole);
-        }
-        
-             if (dto.getNumAttack() == 2) {
-                // supprimer les cartes consommées pour le sort après avoir vérifier que le joueur avait bien les cartes nécessaires
-                // et que l'adversaire sélectionné possède encore des cartes
-                carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow, jCible, Carte.typeCarte.SANG_VIERGE, Carte.typeCarte.CORNE_LICORNE);
+            carteServ.volerCarte(jNow, jCible, nbCVole);
 
-                // si le joueur adverse n'a qu'une carte, il perd
+        }
+
+        if (dto.getNumAttack() == 2) {
+            // supprimer les cartes consommées pour le sort après avoir vérifier que le joueur avait bien les cartes nécessaires
+            // et que l'adversaire sélectionné possède encore des cartes
+            carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow, jCible, Carte.typeCarte.SANG_VIERGE, Carte.typeCarte.CORNE_LICORNE);
+
+            // si le joueur adverse n'a qu'une carte, il perd
             List<Carte> cartesAdversaire = carteCServ.findAllByJoueurId(jCible.getId());
-            
+
             if (cartesAdversaire.size() == 1) {
                 nbCVole = 1;
             }
@@ -270,15 +276,37 @@ public class JoueurController {
                 // nbVole prend la valeur de l'entier le plus proche inférieure ou égal à l'argument
                 nbCVole = (int) Math.ceil(cartesAdversaire.size() / 2);
             }
-            
+
             // vole de carte
             carteServ.volerCarte(jNow, jCible, nbCVole);
- }
-             
-             if (dto.getNumAttack() == 4) {
-                 return "redirect;/divination";
-             }
+        }
+
+        if (dto.getNumAttack() == 4) {
+
+            return "divination";
+
+        }
+
+        joueurServ.joueurSuivant(jNow);
         // vers la jsp
         return "vide";
     }
+
+    //    @RequestMapping(value = "/finJeux", method = RequestMethod.GET)
+//    public String finJeux() {
+//        // supprimer toutes les données en BD
+//        // trouver les listes des cartes et des joueurs
+//        List<Carte> cartes = (List<Carte>) carteCServ.findAll();
+//        List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
+//        // supprimer d'abord la liste des cartes puis des joueurs
+//        for (Carte carte : cartes) {
+//            carteCServ.delete(carte);
+//        }
+//        for (Joueur joueur : joueurs) {
+//            joueurCService.delete(joueur);
+//        }
+//
+//        // repartir pour lancer une nouvelle partie
+//        return "redirect:/connexion";
+//    }
 }

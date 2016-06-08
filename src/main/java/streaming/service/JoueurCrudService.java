@@ -18,6 +18,7 @@ public interface JoueurCrudService extends CrudRepository<Joueur, Long>
     
    public Joueur findOneByPseudo(String pseudo);
    public Joueur findOneByNumAvatar(int numAvatar);
+    public Joueur findOneByOrdre(int ordre); 
  
     
 }

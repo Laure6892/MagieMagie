@@ -100,6 +100,10 @@ public class CarteService {
 
             carteCServ.delete(carte1);
             carteCServ.delete(carte2);
+            
+            int nouveauNbCarte = ((jNow.getNbreCarte())-2);
+            jNow.setNbreCarte(nouveauNbCarte);
+            joueurCService.save(jNow);
         }
     }
 
@@ -141,7 +145,8 @@ public class CarteService {
         // sauvegarder la carte en BD du joueur correspondant (dans la table carte ET joueur)
         carte.setJoueur(joueurCService.findOne(jCible.getId()));
         carte.getJoueur().getCartes().add(carte);
-        jCible.setNbreCarte(jCible.getNbreCarte() + 1);
+        int nbreCarte=jCible.getNbreCarte() + 1;
+        jCible.setNbreCarte(nbreCarte);
         carteCServ.save(carte);
         joueurCService.save(jCible);
         joueurCService.save(jNow);

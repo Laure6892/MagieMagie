@@ -8,7 +8,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
- 
+ <c:if test="${joueurActuel =='true'}"> 
        <form:form modelAttribute="monDto" method="post" >
             <c:if test="${invisibilite==0}">  
             Invisibilité <form:radiobutton path="numAttack" value="1"/>
@@ -37,3 +37,9 @@
          
           <input type="button" onclick= "$.post('lancer_sort', $('form').serialize())" value="Lancer le sort" />
         </form:form>
+ </c:if>
+          
+ <c:if test="${joueurActuel =='false'}"> 
+     Ce n'est pas ton tour
+     </c:if>
+         

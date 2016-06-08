@@ -3,7 +3,7 @@
     Created on : 8 juin 2016, 13:48:13
     Author     : ajc
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,9 +12,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+        <h1>Hello divination!</h1>
+  
 <TABLE >
     <div id="plateau">
                 <TR>
@@ -58,3 +57,5 @@
                                 </TR>
  </TABLE>
     </CENTER>
+      </body>
+</html>

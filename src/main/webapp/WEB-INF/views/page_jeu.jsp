@@ -32,9 +32,9 @@
 
         <h2>Que voulez vous faire Jeune sorcier?</h2>
 <!--        <a href="<c:url value="/sort"/>">Lancer Sort</a><br>-->
-        <input type="button" id="buttonSort" value="Lancer un sort" onclick="loadPage()"/>
+        <input type="button" id="buttonSort" value="Lancer " onclick="loadPage()"/>
        
-        <div id="sortilege"> Essai </div>
+        <div id="sortilege"> * </div>
         <a href="#">Passer mon tour</a><br>
 
 
