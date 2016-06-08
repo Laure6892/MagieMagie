@@ -7,6 +7,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,6 +33,7 @@
         <h2>Que voulez vous faire Jeune sorcier?</h2>
 <!--        <a href="<c:url value="/sort"/>">Lancer Sort</a><br>-->
         <input type="button" id="buttonSort" value="Lancer un sort" onclick="loadPage()"/>
+       
         <div id="sortilege"> Essai </div>
         <a href="#">Passer mon tour</a><br>
 
