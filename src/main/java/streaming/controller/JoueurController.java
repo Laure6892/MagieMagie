@@ -61,32 +61,19 @@ public class JoueurController {
         }
 
         // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
-        joueurCService.save(joueur);
+      //  joueurCService.save(joueur);
         session.setAttribute("joueurNow", joueur);
-       // return "redirect:/start";
-       return "start";
-    }
+        
+            // chercher tous les joueurs qui sont enregistrés en BD
+    //    List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
 
-    @RequestMapping(value = "/page_jeu", method = RequestMethod.GET)
-    public String demarerJeux(Model model, HttpSession session) {
-
-        // chercher tous les joueurs qui sont enregistrés en BD
-        List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
-
-        //########################################################################################
-        // gestion de l'affichage de la fonction démarrer jeux non fonctionnel
-        //########################################################################################
-        // si il n'y a pas 2 joueurs, le bouton "démarer" ne doit pas s'afficher
-//        model.addAttribute("joueursCo", joueurs.size());
-//        int joueursCo = joueurs.size();
-        //########################################################################################
-        // attribuer un ordre de passage pour cahcun des joueurs de la liste
-        for (Joueur joueur : joueurs) {
-            for (int i = 1; i <= joueurs.size(); i++) {
-                joueur.setOrdre(i);
-                // sauvegarder les modifications
-                joueurCService.save(joueur);
-            }
+    
+       
+//            for (int i = 1; i <= joueurs.size(); i++) {
+//                joueur.setOrdre(i);
+//                // sauvegarder les modifications
+//                joueurCService.save(joueur);
+//            }
 
             // crée 7 cartes aléatoirement qui sont associées à un joueur(boucle pour 7 tours/ 7 cartes)
             for (int i = 1; i < 8; i++) {
@@ -106,7 +93,51 @@ public class JoueurController {
  
             joueurCService.save(joueur);
 
-        }
+        
+       return "redirect:/start";
+      // return "start";
+    }
+
+    @RequestMapping(value = "/page_jeu", method = RequestMethod.GET)
+    public String demarerJeux(Model model, HttpSession session) {
+
+//        // chercher tous les joueurs qui sont enregistrés en BD
+//        List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
+//
+//        //########################################################################################
+//        // gestion de l'affichage de la fonction démarrer jeux non fonctionnel
+//        //########################################################################################
+//        // si il n'y a pas 2 joueurs, le bouton "démarer" ne doit pas s'afficher
+////        model.addAttribute("joueursCo", joueurs.size());
+////        int joueursCo = joueurs.size();
+//        //########################################################################################
+//        // attribuer un ordre de passage pour cahcun des joueurs de la liste
+//        for (Joueur joueur : joueurs) {
+//            for (int i = 1; i <= joueurs.size(); i++) {
+//                joueur.setOrdre(i);
+//                // sauvegarder les modifications
+//                joueurCService.save(joueur);
+//            }
+//
+//            // crée 7 cartes aléatoirement qui sont associées à un joueur(boucle pour 7 tours/ 7 cartes)
+//            for (int i = 1; i < 8; i++) {
+//
+//                // Les cartes sont identifiée par un numéro (dans le fichier CarteService)
+//                // lancer un random pour générer un numéro comprit entre 1 et 5 
+//                Random r = new Random();
+//                // max - min + 1
+//                int numeroCarte = 1 + r.nextInt(5 - 1 + 1);
+//
+//                // créer la carte correspondante en récupérant l'id du joueur en question
+//                long idJour = joueur.getId();
+//                carteServ.creationCarteAleatoire(idJour, numeroCarte);
+//                           joueur.setNbreCarte(joueur.getNbreCarte()+1);
+//            }
+//
+// 
+//            joueurCService.save(joueur);
+//
+//        }
         // vers la page jsp du lancement du jeu
         List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
@@ -151,5 +182,23 @@ public class JoueurController {
         model.addAttribute("joueurActuel", joueurActuel);
       
         return "ajax_plateau2";
+    }
+    
+        @RequestMapping(value = "/lister_sort2", method = RequestMethod.GET)
+    public String ajax3(Model model,HttpSession session) {
+    List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
+        Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
+       Long idJ = joueurActuel.getId();
+// 
+        Joueur jDelete = joueurCService.findOne(idJ);
+//         List<Carte> cartes=( List<Carte> )carteCServ.findAllByJoueurId(idJ);
+        joueurs2.remove(jDelete);
+//  
+//         model.addAttribute("listeCarte", cartes);
+        model.addAttribute("listeJoueurs", joueurs2);
+      model.addAttribute("joueurActuel", joueurActuel);
+        
+        // vers la jsp
+        return "lister_sort2";
     }
 }

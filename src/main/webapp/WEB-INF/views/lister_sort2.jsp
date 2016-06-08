@@ -5,4 +5,14 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-    <input type="button" id="buttonSort" value="Lancer un sort" onclick="loadPage()"/>
+    <input type="button" id="buttonSort" value="Invisibilite" onclick="loadPage()"/>
+    ${joueurActuel.pseudo}
+    Cible 
+    <c:forEach items="${listeJoueurs}" var="joueurCo">
+        ${joueurCo.pseudo}
+        <input type="button" id="buttonSort" value="${joueurCo.pseudo}" /><br>
+    </foreach>
+ 
+
+
+
