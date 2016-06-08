@@ -146,19 +146,44 @@ public class JoueurController {
 
         return "ajax_plateau2";
     }
+    
+        @RequestMapping(value = "/divination", method = RequestMethod.GET)
+    public String divination(Model model, HttpSession session) {
+
+        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
+        Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
+        Long idJ = joueurActuel.getId();
+
+        Joueur jDelete = joueurCService.findOne(idJ);
+        joueurs2.remove(jDelete);
+
+        model.addAttribute("listeJoueurs", joueurs2);
+        model.addAttribute("joueurActuel", joueurActuel);
+
+        return "divination";
+    }
 
     @RequestMapping(value = "/lister_sort2", method = RequestMethod.GET)
     public String ajax3(Model model, HttpSession session) {
 
         //envoyer liste des joueurs pour choisir la victime (en excluant le jour à qui c'est le tour) a mettre dans un model) dans la jsp
         List<Joueur> listeEnnemis = (List<Joueur>) joueurCService.findAll();
-
+    
         // recuperer le joueur actuel et récuperer son id
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         Long idJActuel = joueurActuel.getId();
         // récupérer le joueur actuel en BD
         Joueur jDelete = joueurCServ.findOne(idJActuel);
-
+          model.addAttribute("monDto", new ListeSortDTO());
+          
+          //Affichera que les sorts ppossibles
+         
+        
+         model.addAttribute("amour",carteServ.AutorisationSortFiltreAmour(jDelete));
+         model.addAttribute("divination",carteServ.AutorisationSortDivination(jDelete));
+         model.addAttribute("hypnose",carteServ.AutorisationSortHypnose(jDelete));
+         model.addAttribute("invisibilite",carteServ.AutorisationSortInvisibilite(jDelete));
+         model.addAttribute("sommeil",carteServ.AutorisationSortSommeil(jDelete));
         // retirer le joueur actuel de la liste des joueurs cibles potentiels
         listeEnnemis.remove(jDelete);
 
@@ -167,8 +192,8 @@ public class JoueurController {
         List<Carte> cartesJoueurActuel = carteCServ.findAllByJoueurId(idJActuel);
 
 
-        model.addAttribute("monDto", new ListeSortDTO());
-        
+  
+  
         // mettre dans un model la liste des joueurs cibles potentiels à la JSP
         model.addAttribute("listeEnnemis", listeEnnemis);
         // envoyer la liste des cartes que le joueur actuel peut echanger
@@ -189,7 +214,7 @@ public class JoueurController {
         joueurs2.remove(jDelete);
 //  
 //         model.addAttribute("listeCarte", cartes);
-
+     
         model.addAttribute("listeJoueurs", joueurs2);
         model.addAttribute("joueurActuel", joueurActuel);
 
@@ -249,6 +274,10 @@ public class JoueurController {
             // vole de carte
             carteServ.volerCarte(jNow, jCible, nbCVole);
  }
+             
+             if (dto.getNumAttack() == 4) {
+                 return "redirect;/divination";
+             }
         // vers la jsp
         return "vide";
     }
