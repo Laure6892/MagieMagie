@@ -29,7 +29,7 @@
 <center> 
             <TABLE BORDER >
                 <TR>
-                    <TD>  <img src="images/sorcier1.jpg"  width="120" height="200"></TD> 
+                    <TD>  <img src="images/sorcier1.png"  width="120" height="200"></TD> 
                     <TD>  <img src="images/sorcier2.png"  width="120" height="200"></TD> 
                     <TD>  <img src="images/sorcier3.png"  width="120" height="200"></TD> 
                     <TD>  <img src="images/sorcier4.png"  width="120" height="200"></TD> 

@@ -28,27 +28,25 @@ public class Joueur implements Serializable {
 
     private String pseudo;
     private int ordre;
-    private boolean main;
+    private int main;
     // numAvatar permet d'associer un avatar à un joueur
     private int numAvatar;
-    private int nbreCarte;
+    // permet de lancer le jeu pour tous le monde
+    private int jeuEnCour;
     
     // relation
     @OneToMany(mappedBy = "joueur")
     private List<Carte> cartes = new ArrayList<Carte>();
     
     public int getNbreCarte() {
-        return nbreCarte;
-    }
-
-    // getter/setter
-    public void setNbreCarte(int nbreCarte) {    
-        this.nbreCarte = nbreCarte;
+        return cartes.size();
     }
 
     public String getPseudo() {
         return pseudo;
     }
+
+
 
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
@@ -78,15 +76,23 @@ public class Joueur implements Serializable {
         this.cartes = cartes;
     }
 
-    public boolean isMain() {
+    public int getMain() {
         return main;
     }
 
-    public void setMain(boolean main) {
+    public void setMain(int main) {
         this.main = main;
     }
 
-    
+    public int getJeuEnCour() {
+        return jeuEnCour;
+    }
+
+    public void setJeuEnCour(int jeuEnCour) {
+        this.jeuEnCour = jeuEnCour;
+    }
+
+ 
     
     public Long getId() {
         return id;

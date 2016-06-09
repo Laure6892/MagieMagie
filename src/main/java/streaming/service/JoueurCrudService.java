@@ -5,7 +5,7 @@
  */
 package streaming.service;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import streaming.entity.Joueur;
 
@@ -13,11 +13,22 @@ import streaming.entity.Joueur;
  *
  * @author ajc
  */
-public interface JoueurCrudService extends CrudRepository<Joueur, Long>
-{
+public interface JoueurCrudService extends CrudRepository<Joueur, Long> {
+
+    public Joueur findOneByPseudo(String pseudo);
+
+    public Joueur findOneByNumAvatar(int numAvatar);
+
+    public Joueur findOneByOrdre(int ordre);
+
+    public Joueur findOneByMain(int main);
     
-   public Joueur findOneByPseudo(String pseudo);
-   public Joueur findOneByNumAvatar(int numAvatar);
- 
-    
+    @Query("SELECT COUNT(j) "
+            + "FROM Joueur j "
+            + "WHERE 2 <= (  SELECT COUNT(c) "
+            + "             FROM Carte c"
+            + "             WHERE c.joueur.id=j.id"
+            + ")")
+    public int countJoueursHavingMoreThanOneCard(); 
+
 }
