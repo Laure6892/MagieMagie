@@ -20,5 +20,5 @@ public interface CarteCrudService extends CrudRepository<Carte, Long> {
     List<Carte> findAllByJoueurId(long idJoueur);
 
     Carte findOneByJoueurIdAndType(long idJoueur, Carte.typeCarte type);
- 
+  
 }
