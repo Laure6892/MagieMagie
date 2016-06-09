@@ -41,4 +41,4 @@ function callback2()
 {
     setTimeout(chargerPlateau2, 10000);
 }
-chargerPlateau
+chargerPlateau2();
