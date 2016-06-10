@@ -15,10 +15,10 @@ import streaming.entity.Carte;
  */
 public interface CarteCrudService extends CrudRepository<Carte, Long> {
 
-    List<Carte> findAllByJoueurIdAndType(long idJoueur, Carte.typeCarte type);
+    List<Carte> findAllByJoueurIdAndType(long idJoueur, Carte.TypeCarte type);
 
     List<Carte> findAllByJoueurId(long idJoueur);
 
-    Carte findOneByJoueurIdAndType(long idJoueur, Carte.typeCarte type);
+    Carte findOneByJoueurIdAndType(long idJoueur, Carte.TypeCarte type);
   
 }

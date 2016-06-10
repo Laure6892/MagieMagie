@@ -12,9 +12,9 @@
             <div>
                 <td>  <FONT face="Verdana" color="#00008B" size="5">${joueurCo.pseudo}
                     <br> 
-                    
-                      <img src="images/sorcier${joueurCo.numAvatar}.png"  width="150" height="240">
-                      
+
+                    <img src="images/sorcier${joueurCo.numAvatar}.png"  width="150" height="240">
+
                     <br>
                     Nombre de cartes :${joueurCo.nbreCarte}
                     At'il la main? :${joueurCo.main}
@@ -60,6 +60,7 @@
         <br>
         <c:if test="${hypnose==0}">  
             Hypnoze <form:radiobutton path="numAttack" value="3"/>
+            Carte à échanger <form:select items="${listeCarte}" itemLabel="type" itemValue="id" path="idCarteEchangeable"/>
         </c:if>
         <br>
         <c:if test="${divination==0}">  
@@ -79,7 +80,9 @@
     </form:form>
 
     <div id="sortilege"> * </div>
-    <INPUT type="button" onclick="$.get('<c:url value="/passer_tour"/>')" value="Passer son tour"/>
+    <INPUT type="button" onclick="$.get('<c:url value="/finJeux"/>')" value="Vider les tables"/>
+
+    <INPUT type="button" onclick="$.get('<c:url value="/ajax_piocher"/>')" value="Piocher 2 cartes"/>
 
 </c:if>
 

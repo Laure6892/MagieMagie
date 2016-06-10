@@ -36,19 +36,19 @@ public class CarteService {
 
         switch (numeroCarte) {
             case 1:
-                carte.setType(Carte.typeCarte.SANG_VIERGE);
+                carte.setType(Carte.TypeCarte.SANG_VIERGE);
                 break;
             case 2:
-                carte.setType(Carte.typeCarte.AILE_CHAUVE_SOURIS);
+                carte.setType(Carte.TypeCarte.AILE_CHAUVE_SOURIS);
                 break;
             case 3:
-                carte.setType(Carte.typeCarte.CORNE_LICORNE);
+                carte.setType(Carte.TypeCarte.CORNE_LICORNE);
                 break;
             case 4:
-                carte.setType(Carte.typeCarte.BAVE_CRAPAUD);
+                carte.setType(Carte.TypeCarte.BAVE_CRAPAUD);
                 break;
             case 5:
-                carte.setType(Carte.typeCarte.LAPIS_LAZULI);
+                carte.setType(Carte.TypeCarte.LAPIS_LAZULI);
                 break;
         }
         // sauvegarder la carte en BD du joueur correspondant (dans la table carte ET joueur)
@@ -58,7 +58,7 @@ public class CarteService {
         carteCServ.save(carte);
     }
 
-    public void creationCarte(long joueurId, Carte.typeCarte type) {
+    public void creationCarte(long joueurId, Carte.TypeCarte type) {
         // numeroCarte est spécifique à un type de carte, cela permet de créer des cartes aléatoirement
         // (contournement de la difficultée de créer une carte en focntion de son type)
         // numeroCarte est comprit entre 1 et 5
@@ -74,12 +74,12 @@ public class CarteService {
     }
 
 //    changer en id !!!! modification faite
-            public void supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(long idjNow, long idjCible, Carte.typeCarte typeCarte1, Carte.typeCarte typeCarte2) {
+            public void supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(long idjNow, long idjCible, Carte.TypeCarte typeCarte1, Carte.TypeCarte typeCarte2) {
         // supprime les 2 cartes spécifiques du sort à jeter au joueur à qui c'est le tour
         // trouver les cartes du joueur à qui c'est le tour
         
         List<Carte> listeCarte1 = carteCServ.findAllByJoueurIdAndType(idjNow, typeCarte1);
-        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(idjCible, typeCarte2);
+        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(idjNow, typeCarte2);
 
         //  si le joueur n'a pas les cartes nécessaires pour lancer le sort
         if (listeCarte1.isEmpty() || listeCarte2.isEmpty()) {
@@ -119,7 +119,7 @@ public class CarteService {
             //creer un chiffre aléatoire pour déterminer la position de la carte à supprimer au hasard chez l'adversaire
             Random r = new Random();
             // détermination de la position de la carte cible à récupérer de façon random
-            int c = 1 + r.nextInt(cartesAdversaire.size());
+            int c = r.nextInt(cartesAdversaire.size());
             // récupérer la carte se situant à la position c de la liste
             Carte carteCible = cartesAdversaire.get(c);
             // dé-associer la carte au joueur plumé
@@ -137,7 +137,7 @@ public class CarteService {
         }
     }
 
-    public void donnerCarte(Joueur jNow, Joueur jCible, Carte.typeCarte typeCarteEchange) {
+    public void donnerCarte(Joueur jNow, Joueur jCible, Carte.TypeCarte typeCarteEchange) {
 
         // supprimer la carte a donner de la BD de l'attaquant
         Carte carteDonne = carteCServ.findOneByJoueurIdAndType(jNow.getId(), typeCarteEchange);
@@ -160,8 +160,8 @@ public class CarteService {
         // supprime les 2 cartes spécifiques du sort à jeter au joueur à qui c'est le tour
         // trouver les cartes du joueur à qui c'est le tour
         int invisibilite = 0;
-        List<Carte> listeCarte1 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.CORNE_LICORNE);
-        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.BAVE_CRAPAUD);
+        List<Carte> listeCarte1 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.CORNE_LICORNE);
+        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.BAVE_CRAPAUD);
 
         //  si le joueur n'a pas les cartes nécessaires pour lancer le sort
         if (listeCarte1.isEmpty() || listeCarte2.isEmpty()) {
@@ -176,8 +176,8 @@ public class CarteService {
         // supprime les 2 cartes spécifiques du sort à jeter au joueur à qui c'est le tour
         // trouver les cartes du joueur à qui c'est le tour
         int invisibilite = 0;
-        List<Carte> listeCarte1 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.CORNE_LICORNE);
-        List<Carte> listeCarte3 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.SANG_VIERGE);
+        List<Carte> listeCarte1 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.CORNE_LICORNE);
+        List<Carte> listeCarte3 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.SANG_VIERGE);
 
         //  si le joueur n'a pas les cartes nécessaires pour lancer le sort
         if (listeCarte1.isEmpty() || listeCarte3.isEmpty()) {
@@ -193,8 +193,8 @@ public class CarteService {
         // trouver les cartes du joueur à qui c'est le tour
         int invisibilite = 0;
 
-        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.BAVE_CRAPAUD);
-        List<Carte> listeCarte4 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.LAPIS_LAZULI);
+        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.BAVE_CRAPAUD);
+        List<Carte> listeCarte4 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.LAPIS_LAZULI);
 
         //  si le joueur n'a pas les cartes nécessaires pour lancer le sort
         if (listeCarte2.isEmpty() || listeCarte4.isEmpty()) {
@@ -210,9 +210,9 @@ public class CarteService {
         // trouver les cartes du joueur à qui c'est le tour
         int invisibilite = 0;
 
-        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.BAVE_CRAPAUD);
+        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.BAVE_CRAPAUD);
 
-        List<Carte> listeCarte4 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.LAPIS_LAZULI);
+        List<Carte> listeCarte4 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.LAPIS_LAZULI);
 
         if (listeCarte2.isEmpty() || listeCarte4.isEmpty()) {
             invisibilite = 1;
@@ -227,8 +227,8 @@ public class CarteService {
         // trouver les cartes du joueur à qui c'est le tour
         int invisibilite = 0;
 
-        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.BAVE_CRAPAUD);
-        List<Carte> listeCarte3 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.typeCarte.SANG_VIERGE);
+        List<Carte> listeCarte2 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.BAVE_CRAPAUD);
+        List<Carte> listeCarte3 = carteCServ.findAllByJoueurIdAndType(jNow.getId(), Carte.TypeCarte.SANG_VIERGE);
 
         if (listeCarte3.isEmpty() || listeCarte2.isEmpty()) {
             invisibilite = 1;

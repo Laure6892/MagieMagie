@@ -35,7 +35,7 @@ public class Carte implements Serializable {
         this.id = id;
     }
 
-    public enum typeCarte {
+    public enum TypeCarte {
         BAVE_CRAPAUD,
         SANG_VIERGE,
         LAPIS_LAZULI,
@@ -43,7 +43,7 @@ public class Carte implements Serializable {
         AILE_CHAUVE_SOURIS,
     }
     @Enumerated(EnumType.STRING)
-    private typeCarte type;
+    private TypeCarte type;
 
     // relations
     @ManyToOne
@@ -71,11 +71,11 @@ public class Carte implements Serializable {
         return true;
     }
 
-    public typeCarte getType() {
+    public TypeCarte getType() {
         return type;
     }
 
-    public void setType(typeCarte type) {
+    public void setType(TypeCarte type) {
         this.type = type;
     }
 

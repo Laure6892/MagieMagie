@@ -5,6 +5,7 @@
  */
 package streaming.service;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import streaming.entity.Joueur;
@@ -30,5 +31,7 @@ public interface JoueurCrudService extends CrudRepository<Joueur, Long> {
             + "             WHERE c.joueur.id=j.id"
             + ")")
     public int countJoueursHavingMoreThanOneCard(); 
+    
+    public int countByTourSommeilProfondGreaterThan(int penalite);
 
 }

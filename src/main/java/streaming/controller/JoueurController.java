@@ -9,7 +9,6 @@ import dto.ListeSortDTO;
 import java.util.List;
 import java.util.Random;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +31,6 @@ import streaming.service.JoueurCrudService;
 public class JoueurController {
 
     @Autowired
-    private JoueurCrudService joueurCService;
-    @Autowired
     private JoueurCrudService joueurCServ;
     @Autowired
     private CarteCrudService carteCServ;
@@ -41,6 +38,31 @@ public class JoueurController {
     private CarteService carteServ;
     @Autowired
     private JoueurService joueurServ;
+
+    @RequestMapping(value = "/ajax_piocher", method = RequestMethod.GET)
+    public String creerCarte(HttpSession session) {
+        // récupérer les données renseignées dans le formulaire et les sauvegarder en BD
+        //  joueurCService.save(joueur);
+        Joueur joueur = (Joueur) session.getAttribute("joueurNow");
+
+        // Ajoute 2 cartes au joueur
+        for (int i = 0; i < 2; i++) {
+            // Les cartes sont identifiée par un numéro (dans le fichier CarteService)
+            // lancer un random pour générer un numéro comprit entre 1 et 5 
+            Random r = new Random();
+            // Crée entier entre 1-5
+            int numeroCarte = 1 + r.nextInt(5);
+
+            // créer la carte correspondante en récupérant l'id du joueur en question
+            long idJour = joueur.getId();
+            carteServ.creationCarteAleatoire(idJour, numeroCarte);
+        }
+
+        // Passe son tour
+        joueurServ.joueurSuivant();
+
+        return "vide";
+    }
 
     // methode créer un joueur
     @RequestMapping(value = "/connexion", method = RequestMethod.GET)
@@ -61,7 +83,7 @@ public class JoueurController {
         int numAvatarSelectionne = joueur.getNumAvatar();
 
         // chercher si il y a un joueur avec cet avatar
-        Joueur j = joueurCService.findOneByNumAvatar(numAvatarSelectionne);
+        Joueur j = joueurCServ.findOneByNumAvatar(numAvatarSelectionne);
         // si j n'est pas null alors l'avatar n'est pas dispo
         if (j != null) {
             throw new RuntimeException("cet avatar est déjà attribué");
@@ -72,7 +94,7 @@ public class JoueurController {
         session.setAttribute("joueurNow", joueur);
 
         // sauvegarder le joueur pour générer son id en BD
-        joueurCService.save(joueur);
+        joueurCServ.save(joueur);
 
         // crée 7 cartes aléatoirement qui sont associées à un joueur(boucle pour 7 tours/ 7 cartes)
         for (int i = 1; i < 8; i++) {
@@ -90,7 +112,7 @@ public class JoueurController {
         // est le premier a jouer
         // l'ordre correspond à la position du joueur en BD
         // recuper la liste des joueurs inscrit pour avoir la taille de la liste
-        List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
+        List<Joueur> joueurs = (List<Joueur>) joueurCServ.findAll();
 
         // setter la valeur de la taille de la liste pour l'ordre
         joueur.setOrdre(joueurs.size());
@@ -103,7 +125,7 @@ public class JoueurController {
         // initialiser la valeur de jeuEnCour à false pour que le plateau de jeu ne s'affiche pas
         joueur.setJeuEnCour(0);
         // sauvegarder les modifications de façon persistante en BD
-        joueurCService.save(joueur);
+        joueurCServ.save(joueur);
 
         return "/start";
         // return "start";
@@ -114,7 +136,7 @@ public class JoueurController {
 
         // enregistrer en BD un paramètre pour lancer le jeu
         // passer en true la valeur de jeuEnCour pour tous les joueurs connectées
-        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
+        List<Joueur> joueurs2 = (List<Joueur>) joueurCServ.findAll();
 
         for (Joueur joueur : joueurs2) {
             joueur.setJeuEnCour(1);
@@ -126,7 +148,7 @@ public class JoueurController {
         Long idJ = joueurActuel.getId();
         //  System.out.println("ICI LE JOUEUR A VIRER ID="+ idJ);  
         // Joueur joueurDelete=joueurCService.findOne(joueurActuel.getId());
-        Joueur jDelete = joueurCService.findOne(idJ);
+        Joueur jDelete = joueurCServ.findOne(idJ);
         joueurs2.remove(jDelete);
 
         model.addAttribute("listeJoueurs", joueurs2);
@@ -139,16 +161,16 @@ public class JoueurController {
     // mettre a jour le plateau mes ressources
     @RequestMapping(value = "/ajax_plateau", method = RequestMethod.GET)
     public String ajaxPlateau(Model model, HttpSession session) {
-        List<Joueur> listeEnnemis = (List<Joueur>) joueurCService.findAll();
+        List<Joueur> listeEnnemis = (List<Joueur>) joueurCServ.findAll();
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         joueurActuel = joueurCServ.findOne(joueurActuel.getId());
         Long idJ = joueurActuel.getId();
 
-        Joueur jDelete = joueurCService.findOne(idJ);
-        List<Carte> cartes = (List<Carte>) carteCServ.findAllByJoueurId(idJ);
+        Joueur jDelete = joueurCServ.findOne(idJ);
+        List<Carte> nosCartes = (List<Carte>) carteCServ.findAllByJoueurId(idJ);
         listeEnnemis.remove(jDelete);
 
-        model.addAttribute("listeCarte", cartes);
+        model.addAttribute("listeCarte", nosCartes);
         model.addAttribute("listeJoueurs", listeEnnemis);
         model.addAttribute("joueurActuel", joueurActuel);
         model.addAttribute("mainJoueurActuel", joueurActuel.getMain());
@@ -182,11 +204,11 @@ public class JoueurController {
     @RequestMapping(value = "/ajax_plateau2", method = RequestMethod.GET)
     public String ajax2(Model model, HttpSession session) {
 
-        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
+        List<Joueur> joueurs2 = (List<Joueur>) joueurCServ.findAll();
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         Long idJ = joueurActuel.getId();
 
-        Joueur jDelete = joueurCService.findOne(idJ);
+        Joueur jDelete = joueurCServ.findOne(idJ);
         joueurs2.remove(jDelete);
 
         model.addAttribute("listeJoueurs", joueurs2);
@@ -201,11 +223,11 @@ public class JoueurController {
     @RequestMapping(value = "/divination", method = RequestMethod.GET)
     public String divination(Model model, HttpSession session) {
 
-        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
+        List<Joueur> joueurs2 = (List<Joueur>) joueurCServ.findAll();
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         Long idJ = joueurActuel.getId();
 
-        Joueur jDelete = joueurCService.findOne(idJ);
+        Joueur jDelete = joueurCServ.findOne(idJ);
         joueurs2.remove(jDelete);
 
         model.addAttribute("listeJoueurs", joueurs2);
@@ -218,12 +240,12 @@ public class JoueurController {
     public String ajax3(Model model, HttpSession session) {
 
         //envoyer liste des joueurs pour choisir la victime (en excluant le jour à qui c'est le tour) a mettre dans un model) dans la jsp
-        List<Joueur> listeEnnemis = (List<Joueur>) joueurCService.findAll();
+        List<Joueur> listeEnnemis = (List<Joueur>) joueurCServ.findAll();
 
         // recuperer le joueur actuel et récuperer son id
         Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
         Long idJActuel = joueurActuel.getId();
-        // récupérer le joueur actuel en BD
+        // récupérer le joueur actuel en BD car session est une photo du joueur lors de la connexion
         Joueur jDelete = joueurCServ.findOne(idJActuel);
         model.addAttribute("joueurActuel", joueurActuel.getMain());
         model.addAttribute("monDto", new ListeSortDTO());
@@ -253,47 +275,41 @@ public class JoueurController {
     @RequestMapping(value = "/lancer_sort", method = RequestMethod.GET)
     public String ajaxLancerSortGET(Model model, HttpSession session) {
 
-        List<Joueur> joueurs2 = (List<Joueur>) joueurCService.findAll();
-        Joueur joueurActuel = (Joueur) session.getAttribute("joueurNow");
-        Long idJ = joueurActuel.getId();
-// 
-        Joueur jDelete = joueurCService.findOne(idJ);
-//         List<Carte> cartes=( List<Carte> )carteCServ.findAllByJoueurId(idJ);
-        joueurs2.remove(jDelete);
-//  
-//         model.addAttribute("listeCarte", cartes);
+        List<Joueur> listeEnnemis = (List<Joueur>) joueurCServ.findAll();
+        // on veux l'attaquant ie avec la main
+        Joueur joueurAttaquant = joueurCServ.findOneByMain(1);
+        Long idJAttaquant = joueurAttaquant.getId();
 
-        model.addAttribute("listeJoueurs", joueurs2);
-        model.addAttribute("joueurActuel", joueurActuel);
+        listeEnnemis.remove(joueurAttaquant);
+
+        model.addAttribute("listeJoueurs", listeEnnemis);
+        model.addAttribute("joueurActuel", joueurAttaquant);
 
         // vers la jsp
         return "vide";
     }
 
     @RequestMapping(value = "/lancer_sort", method = RequestMethod.POST)
-    @Transactional
     public String ajaxLancerSortPOST(@ModelAttribute("monDto") ListeSortDTO dto, HttpSession session) {
+
         int nbCVole = 0;
         int nbCDonne = 0;
 
         // récupérer l'attaquant (celui qui a la main, ou celui du httpsession = identique)
-        Joueur jNow = joueurCServ.findOneByMain(1);
+        Joueur jNow = (Joueur) session.getAttribute("joueurNow");
 
         // récupérer la cible sélectionnée dans le formulaire 
         Joueur jCible = joueurCServ.findOneByPseudo(dto.getEnnemi());
 
         // numAttack permet d'identifier le sort sélectionné par le joueur
-        // a gérer au niveau de la jsp et du controller GET/POST methodes
         // récuperer le numAttack qui est stocké dans un model numAttackDto
         int numAttack = dto.getNumAttack();
-//       // récupérer le joueur cible (dans le dto on récupère l'id du joueur en string)
-//        long idEnnemi = (long) dto.getEnnemi();
-        // chercher l'ennemi avec ce speudo (liste des joueurs)
+
         switch (dto.getNumAttack()) {
             case 1:
                 // supprimer les cartes consommées pour le sort après avoir vérifier que le joueur avait bien les cartes nécessaires
                 // et que l'adversaire sélectionné possède encore des cartes
-                carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow.getId(), jCible.getId(), Carte.typeCarte.BAVE_CRAPAUD, Carte.typeCarte.CORNE_LICORNE);
+                carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow.getId(), jCible.getId(), Carte.TypeCarte.BAVE_CRAPAUD, Carte.TypeCarte.CORNE_LICORNE);
 
                 // nombre de cartes à supprimer chez l'adversaire/creer chez l'attaquant
                 nbCVole = 1;
@@ -304,7 +320,7 @@ public class JoueurController {
             case 2:
                 // supprimer les cartes consommées pour le sort après avoir vérifier que le joueur avait bien les cartes nécessaires
                 // et que l'adversaire sélectionné possède encore des cartes
-                carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow.getId(), jCible.getId(), Carte.typeCarte.SANG_VIERGE, Carte.typeCarte.CORNE_LICORNE);
+                carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow.getId(), jCible.getId(), Carte.TypeCarte.SANG_VIERGE, Carte.TypeCarte.CORNE_LICORNE);
 
                 // si le joueur adverse n'a qu'une carte, il perd
                 List<Carte> cartesAdversaire = carteCServ.findAllByJoueurId(jCible.getId());
@@ -315,7 +331,7 @@ public class JoueurController {
                 // supprimer la moitier des cartes de l'adversaire cible de façon aleatoire et créer des cartes identiques chez l'attaquant
                 if (cartesAdversaire.size() > 1) {
                     // nbVole prend la valeur de l'entier le plus proche inférieure ou égal à l'argument
-                    nbCVole = (int) Math.ceil(cartesAdversaire.size() / 2);
+                    nbCVole = cartesAdversaire.size() / 2 + (cartesAdversaire.size() % 2);
                 }
 
                 // vole de carte
@@ -323,8 +339,29 @@ public class JoueurController {
                 break;
 
             case 3:
+                // Suppression 2 cartes conso 
+                carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow.getId(), jCible.getId(), Carte.TypeCarte.BAVE_CRAPAUD, Carte.TypeCarte.LAPIS_LAZULI);
+
+                // Donner la carte dto.idCarteEchangee à joueurCible
+                Carte carteAEchanger = carteCServ.findOne(dto.getIdCarteEchangeable());
+                carteCServ.delete(dto.getIdCarteEchangeable());
+                carteServ.creationCarte(jCible.getId(), carteAEchanger.getType());
+
+                // Voler 3 cartes au joueur cible
+                carteServ.volerCarte(jNow.getId(), jCible.getId(), 3);
+
+                break;
+            case 4:
                 return "divination";
 
+            case 5:
+                // Suppression 2 cartes conso 
+                carteServ.supprimerCarteConsommeesEtGestionRessourceDispoAttaquantEtCible(jNow.getId(), jCible.getId(), Carte.TypeCarte.SANG_VIERGE, Carte.TypeCarte.BAVE_CRAPAUD);
+                // recupérer joueurCible et mettre son compteur tourSommeilProfond + 2
+                jCible.setTourSommeilProfond(jCible.getTourSommeilProfond() + 2);
+                joueurCServ.save(jCible);
+
+                break;
             default:
                 throw new RuntimeException("pas de sort sélectionné");
 
@@ -341,21 +378,14 @@ public class JoueurController {
         return "ajax_vide";
     }
 
-    //    @RequestMapping(value = "/finJeux", method = RequestMethod.GET)
-//    public String finJeux() {
-//        // supprimer toutes les données en BD
-//        // trouver les listes des cartes et des joueurs
-//        List<Carte> cartes = (List<Carte>) carteCServ.findAll();
-//        List<Joueur> joueurs = (List<Joueur>) joueurCService.findAll();
-//        // supprimer d'abord la liste des cartes puis des joueurs
-//        for (Carte carte : cartes) {
-//            carteCServ.delete(carte);
-//        }
-//        for (Joueur joueur : joueurs) {
-//            joueurCService.delete(joueur);
-//        }
-//
-//        // repartir pour lancer une nouvelle partie
-//        return "redirect:/connexion";
-//    }
+    @RequestMapping(value = "/finJeux", method = RequestMethod.GET)
+    public String finJeux() {
+        // supprimer toutes les données en BD
+        // trouver les listes des cartes et des joueurs
+        carteCServ.deleteAll();
+        joueurCServ.deleteAll();
+
+        // repartir pour lancer une nouvelle partie
+        return "redirect:/connexion";
+    }
 }

@@ -5,10 +5,10 @@
  */
 package streaming.service;
 
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import streaming.entity.Joueur;
+import streaming.entity.Joueur_;
 
 /**
  *
@@ -16,8 +16,8 @@ import streaming.entity.Joueur;
  */
 @Service
 public class JoueurService {
-    
-  @Autowired
+
+    @Autowired
     private CarteCrudService carteCServ;
 
     @Autowired
@@ -25,53 +25,50 @@ public class JoueurService {
 
     @Autowired
     private JoueurCrudService joueurCServ;
-    
-    @Transactional
-    public void joueurSuivant()
-    {
-        
-      Joueur jNow = joueurCServ.findOneByMain(1);
-      // si le sort a fonctionné il faut passer la main au joueur suivant
-        // passer à false la valeur de la main pour le joueur actuel
-        jNow.setMain(0);
+
+    public void joueurSuivant() {
+        // récupère le joueur qui a la main et qui la passe au joueur suivant
+        Joueur jActuel = joueurCServ.findOneByMain(1);
+        // stocker l'ordre sont ordre pour gérer l'entré/sortie de la boucle while
+        int ordreJInitial = jActuel.getOrdre();
+        // passer la valeur de la main pour le joueur actuel à 0 = plus personne n'a la main
+        // jusqu'à ce qu'on trouve joueur existant pouvant jouer
+        jActuel.setMain(0);
         // sauvegarde les modif
-        joueurCServ.save(jNow);
-        // passer la main au joueur dont l'ordre est le suivant
-        // trouver le joueur dont ordre = ordre joueurNow + 1
+        joueurCServ.save(jActuel);
 
-      //  Joueur joueurSuivant = joueurCServ.findOneByOrdre(jNow.getOrdre() + 1);
-        
-        int ordreJoueurActuel =jNow.getOrdre();
-        Joueur joueurSuivant=joueurCServ.findOneByOrdre(ordreJoueurActuel+1);
-        
-         // si joueurSuivant est null, on repasse la main au joueur d'ordre 1
-        if (joueurSuivant == null) {
-            // trouver le joueur avec ordre 1
-            joueurSuivant = joueurCServ.findOneByOrdre(1);
-        }
-        
-        // si il existe mais il reste que 1 ou 0 carte, il ne peut pas jouer
-        //tant qu'aucun joueur suivant n'a plus de carte on continue jusqu'à un joueur avec des cartes
-        // > Si joueurSuivant < 2 cartes => choisit le 1er joureur (dans l'ordre) qui en possède au moins 2
-        // si aucun joueur n'a assez de cartes = throw exception
-        
-//        if( joueurCServ.countJoueursHavingMoreThanOneCard()<=0 )
-//            throw new RuntimeException("Partie terminée - personne ne possède 2 cartes");
-//        
-//         while (joueurSuivant.getNbreCarte()<2)
-//         {  
-//            joueurSuivant=joueurCServ.findOneByOrdre(joueurSuivant.getOrdre()+1);
-//            if (joueurSuivant == null) {
-//                // trouver le joueur avec ordre 1
-//                joueurSuivant = joueurCServ.findOneByOrdre(1);
-//            }
-//         }
-        // si joueurSuivant est null, on repasse la main au joueur d'ordre 1
+        // début de la boucle while
+        do {
+            // passer la main au joueur dont l'ordre est le suivant
+            // trouver le joueur dont ordre = ordre joueurNow + 1
 
-        
-        joueurSuivant.setMain(1);
-        // sauvegarder les modif
-        joueurCServ.save(joueurSuivant);
-    
-}
+            jActuel = joueurCServ.findOneByOrdre(jActuel.getOrdre() +1);
+
+            // si joueurSuivant est null, on repasse la main au joueur d'ordre 1
+            if (jActuel == null) {
+                // trouver le joueur avec ordre 1
+                jActuel = joueurCServ.findOneByOrdre(1);
+            }
+
+            //  si le jActuel possède au moin 1 carte
+            if ( carteCServ.findAllByJoueurId(jActuel.getId()).size() >= 1) {
+
+                // Décrémente pénalité so pénalité
+                if (jActuel.getTourSommeilProfond() > 0){
+                    
+                    jActuel.setTourSommeilProfond(jActuel.getTourSommeilProfond()-1);
+                    joueurCServ.save(jActuel);
+                }else{
+                    
+                    
+                    jActuel.setMain(1);
+                    joueurCServ.save(jActuel);
+                    return;
+                }
+            }
+        } while (jActuel.getOrdre() != ordreJInitial || joueurCServ.countByTourSommeilProfondGreaterThan(0) >= 1);
+
+        // Partie terminée
+        throw new RuntimeException("PARTIE TERMINEE");
+    }
 }

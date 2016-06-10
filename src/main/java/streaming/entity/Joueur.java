@@ -34,6 +34,7 @@ public class Joueur implements Serializable {
     // permet de lancer le jeu pour tous le monde
     private int jeuEnCour;
     
+    private int tourSommeilProfond;
     // relation
     @OneToMany(mappedBy = "joueur")
     private List<Carte> cartes = new ArrayList<Carte>();
@@ -44,6 +45,14 @@ public class Joueur implements Serializable {
 
     public String getPseudo() {
         return pseudo;
+    }
+
+    public int getTourSommeilProfond() {
+        return tourSommeilProfond;
+    }
+
+    public void setTourSommeilProfond(int tourSommeilProfond) {
+        this.tourSommeilProfond = tourSommeilProfond;
     }
 
 

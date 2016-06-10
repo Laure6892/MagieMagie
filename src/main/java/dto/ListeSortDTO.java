@@ -19,7 +19,15 @@ public class ListeSortDTO {
     
     private String ennemi;
     
-    private Carte carteEchangeable;
+    private Long idCarteEchangeable;
+
+    public Long getIdCarteEchangeable() {
+        return idCarteEchangeable;
+    }
+
+    public void setIdCarteEchangeable(Long idCarteEchangeable) {
+        this.idCarteEchangeable = idCarteEchangeable;
+    }
 
     public int getNumAttack() {
         return numAttack;
@@ -27,14 +35,6 @@ public class ListeSortDTO {
 
     public void setNumAttack(int numAttack) {
         this.numAttack = numAttack;
-    }
-
-    public Carte getCarteEchangeable() {
-        return carteEchangeable;
-    }
-
-    public void setCarteEchangeable(Carte carteEchangeable) {
-        this.carteEchangeable = carteEchangeable;
     }
 
     public String getEnnemi() {
